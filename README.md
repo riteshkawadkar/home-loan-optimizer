@@ -179,7 +179,7 @@ Contributions welcome! Please:
 
 - **[GitHub Discussions](https://github.com/riteshkawadkar/home-loan-optimizer/discussions)** - Ask questions
 - **[Issues](https://github.com/riteshkawadkar/home-loan-optimizer/issues)** - Report bugs
-- **[Feedback Form](https://forms.gle/YourGoogleFormID)** - Share feedback
+- **[Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSdm7UqCqTw6arkF3F06yny26YTez48v9qV9-B7XBVhN0Byd3Q/viewform)** - Share feedback
 
 ---
 
