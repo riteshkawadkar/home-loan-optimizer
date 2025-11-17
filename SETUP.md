@@ -1,165 +1,122 @@
-# Setup Guide
+# 🔧 Setup Instructions
 
-## Initial Setup
+## Post-Deployment Configuration
 
-### 1. Clone the Repository
+### 1. Google Analytics Setup
 
-```bash
-git clone https://github.com/riteshkawadkar/home-loan-optimizer.git
-cd home-loan-optimizer
-```
+#### Create Google Analytics Account
+1. Go to [Google Analytics](https://analytics.google.com/)
+2. Create a new property for your website
+3. Get your GA4 Measurement ID (format: `G-XXXXXXXXXX`)
 
-### 2. Install Dependencies
+#### Update Analytics ID
+1. Open `index.html`
+2. Replace both instances of `G-XXXXXXXXXX` with your actual GA4 ID:
+   ```html
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR-ACTUAL-ID"></script>
+   <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+     gtag('config', 'G-YOUR-ACTUAL-ID', {
+       page_title: 'Home Loan Optimizer',
+       page_location: window.location.href
+     });
+   </script>
+   ```
+3. Commit and push changes
 
-```bash
-npm install
-```
+#### Verify Setup
+1. Visit your live site
+2. Check Google Analytics Real-time reports
+3. Should see your visit within 5 minutes
 
-### 3. Start Development Server
+---
 
-```bash
-npm run dev
-```
+### 2. Feedback Form Setup
 
-The app will be available at `http://localhost:5173`
+#### Create Google Form
+1. Go to [Google Forms](https://forms.google.com/)
+2. Create a new form with these fields:
+   - **Overall Rating** (1-5 stars)
+   - **What did you like most?** (Long answer)
+   - **What could be improved?** (Long answer)
+   - **Would you recommend this tool?** (Yes/No)
+   - **Any additional features you'd like?** (Long answer)
+   - **Email** (Optional, for follow-up)
 
-## Publishing to GitHub
+#### Update Feedback Link
+1. Get the shareable link from Google Forms
+2. Open `src/App.tsx`
+3. Find and replace:
+   ```typescript
+   href="https://forms.gle/YourGoogleFormID"
+   ```
+   with your actual form URL
+4. Commit and push changes
 
-### 1. Create a New Repository on GitHub
+---
 
-1. Go to https://github.com/new
-2. Name it `home-loan-optimizer`
-3. Don't initialize with README (we already have one)
-4. Click "Create repository"
+### 3. Screenshots for README
 
-### 2. Initialize Git (if not already done)
+#### Take Screenshots
+1. Open the live app
+2. Fill in sample data:
+   - Loan Amount: ₹50,00,000
+   - Tenure: 240 months
+   - EMI: ₹40,000
+   - Interest Rate: 8.5%
+   - Start Date: Jan 2020
+   - Monthly Surplus: ₹25,000
 
-```bash
-git init
-git add .
-git commit -m "Initial commit: Home Loan Optimizer v1.0.0"
-```
+3. Take 4 screenshots:
+   - **dashboard.png** - Main dashboard view
+   - **ai-recommendations.png** - AI analysis section
+   - **detailed-comparison.png** - Comparison table
+   - **amortization.png** - Payment schedule
 
-### 3. Connect to GitHub
+4. Optimize images:
+   - Use PNG format
+   - Compress for web (keep under 500KB each)
+   - Save in `screenshots/` folder
 
-```bash
-git remote add origin https://github.com/riteshkawadkar/home-loan-optimizer.git
-git branch -M main
-git push -u origin main
-```
+---
 
-### 4. Update Repository URLs
+### 4. Social Media Images (Optional)
 
-Replace `yourusername` in these files with your actual GitHub username:
-- `README.md`
-- `package.json`
-- `CHANGELOG.md`
+#### Create Open Graph Image
+1. Create a 1200x630px image showcasing your tool
+2. Include: Tool name, key features, screenshot
+3. Save as `public/og-image.png`
+4. Update meta tags in `index.html` if needed
 
-## Building for Production
+---
 
-```bash
-npm run build
-```
+## 🚀 Launch Checklist
 
-The built files will be in the `dist` directory.
+- [ ] Google Analytics configured and working
+- [ ] Feedback form created and linked
+- [ ] Screenshots added to README
+- [ ] All links tested and working
+- [ ] Mobile responsiveness verified
+- [ ] Cross-browser testing completed
+- [ ] Performance optimized (Lighthouse score >90)
 
-## Deploying
+---
 
-### Deploy to GitHub Pages
+## 📊 Success Metrics to Track
 
-1. Install gh-pages:
-```bash
-npm install --save-dev gh-pages
-```
+- **Usage**: Daily/Monthly active users
+- **Engagement**: Time on site, pages per session
+- **Conversion**: Feedback form submissions
+- **Growth**: GitHub stars, social shares
+- **Quality**: User feedback ratings
 
-2. Add to package.json scripts:
-```json
-"predeploy": "npm run build",
-"deploy": "gh-pages -d dist"
-```
+---
 
-3. Add to vite.config.ts:
-```typescript
-export default defineConfig({
-  base: '/home-loan-optimizer/',
-  // ... rest of config
-})
-```
+## 🔄 Regular Maintenance
 
-4. Deploy:
-```bash
-npm run deploy
-```
-
-### Deploy to Vercel
-
-1. Install Vercel CLI:
-```bash
-npm install -g vercel
-```
-
-2. Deploy:
-```bash
-vercel
-```
-
-### Deploy to Netlify
-
-1. Install Netlify CLI:
-```bash
-npm install -g netlify-cli
-```
-
-2. Deploy:
-```bash
-netlify deploy --prod
-```
-
-## Environment Variables
-
-Currently, this project doesn't require any environment variables. If you add API integrations in the future, create a `.env` file:
-
-```env
-VITE_API_KEY=your_api_key_here
-```
-
-## Troubleshooting
-
-### Port Already in Use
-
-If port 5173 is already in use:
-```bash
-npm run dev -- --port 3000
-```
-
-### Build Errors
-
-Clear cache and reinstall:
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Type Errors
-
-Run type checking:
-```bash
-npx tsc --noEmit
-```
-
-## Next Steps
-
-1. ⭐ Star the repository
-2. 📝 Update README with your information
-3. 🎨 Customize branding/colors
-4. 🚀 Deploy to your preferred platform
-5. 📢 Share with the community!
-
-## Support
-
-For issues or questions:
-- Open an issue on GitHub
-- Check existing issues first
-- Provide detailed information
-
-Happy coding! 🎉
+- **Weekly**: Check analytics, respond to feedback
+- **Monthly**: Update investment rates, review suggestions
+- **Quarterly**: Add new features based on feedback
+- **Yearly**: Major version updates, technology upgrades

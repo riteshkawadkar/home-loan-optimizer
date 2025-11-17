@@ -8,6 +8,8 @@ import DetailedComparison from './components/DetailedComparison';
 import AIRecommendations from './components/AIRecommendations';
 import VisualDashboard from './components/VisualDashboard';
 import OptimalStrategyModal from './components/OptimalStrategyModal';
+import ShareButtons from './components/ShareButtons';
+import FAQSection from './components/FAQSection';
 import { calculateOutstandingPrincipal, calculateMonthsElapsed, generateAmortizationSchedule } from './utils/calculations';
 import { calculateOptimalPrepaymentStrategy } from './utils/aiAnalysis';
 import './App.css';
@@ -132,7 +134,52 @@ function App() {
           <h1>🏠 Home Loan Optimizer</h1>
           <p>Smart prepayment vs investment analysis</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          {/* Feedback Button - Prominent */}
+          <a
+            href="https://forms.gle/YourGoogleFormID"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'feedback_click', {
+                  event_category: 'User Interaction',
+                  event_label: 'Header Feedback Button'
+                });
+              }
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '10px 20px',
+              background: 'white',
+              color: '#667eea',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontSize: '0.95rem',
+              fontWeight: 700,
+              transition: 'all 0.3s ease',
+              border: '2px solid white',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#667eea';
+              e.currentTarget.style.color = 'white';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'white';
+              e.currentTarget.style.color = '#667eea';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+            }}
+          >
+            <span>💬</span>
+            <span>Share Feedback</span>
+          </a>
+
           {/* GitHub Buttons */}
           <a
             href="https://github.com/riteshkawadkar/home-loan-optimizer"
@@ -312,6 +359,25 @@ function App() {
         onApply={handleApplyOptimalStrategy}
         surplusAmount={surplusAmount}
       />
+
+      {/* Share Section */}
+      <div className="container" style={{ marginTop: '40px', maxWidth: '1200px', margin: '40px auto 0' }}>
+        <div className="card" style={{ textAlign: 'center', padding: '32px' }}>
+          <h2 style={{ marginBottom: '12px', fontSize: '1.8rem' }}>📢 Found this helpful?</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '1.05rem' }}>
+            Share with friends and family who might benefit from this tool!
+          </p>
+          <ShareButtons 
+            url="https://riteshkawadkar.github.io/home-loan-optimizer/"
+            title="Home Loan Optimizer - Prepay vs Invest Calculator"
+          />
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="container" style={{ marginTop: '24px', maxWidth: '1200px', margin: '24px auto 0' }}>
+        <FAQSection />
+      </div>
 
       {/* Footer */}
       <footer className="app-footer">
