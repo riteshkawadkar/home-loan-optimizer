@@ -16,7 +16,7 @@ interface Props {
   selectedInvestment: InvestmentOption;
 }
 
-export default function DetailedComparison({ loanInfo, prepaymentPlan, surplusAmount, selectedInvestment }: Props) {
+export default function DetailedComparison({ loanInfo, prepaymentPlan, selectedInvestment }: Props) {
   const startDate = new Date();
   const monthsElapsed = calculateMonthsElapsed(loanInfo.startDate);
   const outstandingPrincipal = calculateOutstandingPrincipal(

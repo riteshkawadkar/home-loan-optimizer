@@ -72,7 +72,7 @@ function App() {
   });
 
   const [surplusAmount, setSurplusAmount] = useState<number>(20000);
-  const [selectedInvestment, setSelectedInvestment] = useState<InvestmentOption>(defaultInvestmentOptions[0]);
+  const [selectedInvestment] = useState<InvestmentOption>(defaultInvestmentOptions[0]);
   const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'analysis' | 'schedule'>('overview');
   const [showOptimalStrategyModal, setShowOptimalStrategyModal] = useState(false);
 
@@ -142,13 +142,78 @@ function App() {
           <h1>🏠 Home Loan Optimizer</h1>
           <p>Smart prepayment vs investment analysis</p>
         </div>
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙' : '☀️'}
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {/* GitHub Buttons */}
+          <a
+            href="https://github.com/riteshkawadkar/home-loan-optimizer"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 16px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <span>⭐</span>
+            <span>Star</span>
+          </a>
+          <a
+            href="https://github.com/riteshkawadkar/home-loan-optimizer/fork"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 16px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <span>🍴</span>
+            <span>Fork</span>
+          </a>
+          <button 
+            className="theme-toggle" 
+            onClick={toggleTheme}
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
       </header>
 
       <div className="app-container">

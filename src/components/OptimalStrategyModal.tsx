@@ -276,7 +276,8 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
                   style={{ 
                     fontSize: '1rem', 
                     opacity: 0.95,
-                    lineHeight: '1.5'
+                    lineHeight: '1.5',
+                    marginBottom: '16px'
                   }}
                 >
                   {hasSavings 
@@ -284,6 +285,46 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
                     : 'AI-powered analysis based on your financial profile'
                   }
                 </motion.p>
+
+                {/* GitHub Star Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  style={{ marginTop: '12px' }}
+                >
+                  <a
+                    href="https://github.com/riteshkawadkar/home-loan-optimizer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '10px 20px',
+                      background: 'rgba(255, 255, 255, 0.25)',
+                      color: 'white',
+                      textDecoration: 'none',
+                      borderRadius: '8px',
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      transition: 'all 0.3s ease',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.3)'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)';
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                      e.currentTarget.style.transform = 'scale(1)';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>⭐</span>
+                    <span>Star this project on GitHub</span>
+                  </a>
+                </motion.div>
 
                 {/* Badges */}
                 <motion.div

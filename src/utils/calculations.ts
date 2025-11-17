@@ -151,7 +151,7 @@ export interface Recommendation {
 }
 
 export const generateRecommendation = (input: RecommendationInput): Recommendation => {
-  const { loanInfo, financialHealth, selectedInvestment, surplusAmount, outstandingPrincipal } = input;
+  const { loanInfo, financialHealth, selectedInvestment } = input;
   
   const loanAge = getLoanAge(loanInfo.startDate);
   const emergencyStatus = getEmergencyFundStatus(
