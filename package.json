@@ -1,0 +1,48 @@
+{
+  "name": "home-loan-optimizer",
+  "version": "1.0.0",
+  "description": "An advanced financial planning tool for home loan prepayment vs investment analysis",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/home-loan-optimizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/home-loan-optimizer/issues"
+  },
+  "homepage": "https://github.com/yourusername/home-loan-optimizer#readme",
+  "keywords": [
+    "home-loan",
+    "loan-calculator",
+    "prepayment",
+    "investment",
+    "financial-planning",
+    "ai-recommendations",
+    "react",
+    "typescript"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "date-fns": "^3.0.0",
+    "framer-motion": "^12.23.24",
+    "react": "^18.3.1",
+    "react-circular-progressbar": "^2.2.0",
+    "react-countup": "^6.5.3",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "recharts": "^2.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0"
+  }
+}
