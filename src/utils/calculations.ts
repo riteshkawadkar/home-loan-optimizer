@@ -508,5 +508,5 @@ export const calculateOutstandingPrincipal = (
     if (balance <= 0) return 0;
   }
   
-  return Math.max(0, balance);
+  return Math.round(Math.max(0, balance));
 };

@@ -43,6 +43,17 @@ export default function AIRecommendations({
   onShowOptimalStrategy
 }: Props) {
   const [showDetailedForm, setShowDetailedForm] = useState(false);
+  const [expandedInsights, setExpandedInsights] = useState<Set<number>>(new Set());
+
+  const toggleInsight = (index: number) => {
+    const newExpanded = new Set(expandedInsights);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedInsights(newExpanded);
+  };
   
   const startDate = new Date();
   const monthsElapsed = calculateMonthsElapsed(loanInfo.startDate);
@@ -298,23 +309,6 @@ export default function AIRecommendations({
 
   return (
     <div className="card">
-      <div style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        padding: '24px',
-        borderRadius: '12px',
-        marginBottom: '24px',
-        color: 'white'
-      }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span>🤖</span>
-          <span>AI-Powered Financial Analysis</span>
-        </h2>
-        <p style={{ fontSize: '1rem', opacity: 0.95, lineHeight: '1.6' }}>
-          Comprehensive analysis of your loan, investments, and financial health with personalized recommendations
-          based on {insights.length} key factors.
-        </p>
-      </div>
-
       {/* Optimal Strategy Button */}
       <button
         onClick={() => onShowOptimalStrategy && onShowOptimalStrategy()}
@@ -418,6 +412,23 @@ export default function AIRecommendations({
           </h3>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: 0 }}>
             Provide your complete financial profile for deeper AI analysis and tailored recommendations
+          </p>
+        </div>
+
+        {/* AI Analysis Description */}
+        <div style={{ 
+          marginBottom: '16px',
+          padding: '12px 0',
+          borderTop: '1px solid var(--border-color)',
+          borderBottom: '1px solid var(--border-color)'
+        }}>
+          <h4 style={{ fontSize: '1.1rem', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+            <span>🤖</span>
+            <span>AI-Powered Financial Analysis</span>
+          </h4>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+            Comprehensive analysis of your loan, investments, and financial health with personalized recommendations
+            based on {insights.length} key factors.
           </p>
         </div>
 
@@ -533,85 +544,121 @@ export default function AIRecommendations({
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {insights.map((insight, idx) => (
-          <div 
-            key={idx}
-            style={{ 
-              padding: '20px',
-              background: insight.priority === 'critical' ? '#fff5f5' : insight.priority === 'high' ? '#fffbf0' : '#f8f9fa',
-              borderRadius: '12px',
-              border: `2px solid ${
-                insight.priority === 'critical' ? '#e74c3c' : 
-                insight.priority === 'high' ? '#f39c12' : 
-                insight.priority === 'medium' ? '#3498db' : 
-                '#95a5a6'
-              }`
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'start', gap: '16px', marginBottom: '16px' }}>
-              <div style={{ fontSize: '2rem' }}>{insight.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                  <h3 style={{ fontSize: '1.2rem', margin: 0, color: '#2c3e50' }}>
-                    {insight.title}
-                  </h3>
-                  <span style={{ 
-                    padding: '4px 12px',
-                    borderRadius: '12px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    background: insight.priority === 'critical' ? '#e74c3c' : 
-                               insight.priority === 'high' ? '#f39c12' : 
-                               insight.priority === 'medium' ? '#3498db' : '#95a5a6',
-                    color: 'white'
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {insights.map((insight, idx) => {
+          const isExpanded = expandedInsights.has(idx);
+          return (
+            <div 
+              key={idx}
+              style={{ 
+                background: insight.priority === 'critical' ? '#fff5f5' : insight.priority === 'high' ? '#fffbf0' : '#f8f9fa',
+                borderRadius: '12px',
+                border: `2px solid ${
+                  insight.priority === 'critical' ? '#e74c3c' : 
+                  insight.priority === 'high' ? '#f39c12' : 
+                  insight.priority === 'medium' ? '#3498db' : 
+                  '#95a5a6'
+                }`,
+                overflow: 'hidden'
+              }}
+            >
+              {/* Header - Always visible */}
+              <div 
+                onClick={() => toggleInsight(idx)}
+                style={{ 
+                  padding: '16px 20px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  transition: 'background 0.2s',
+                  background: isExpanded ? 'rgba(0,0,0,0.02)' : 'transparent'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.03)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = isExpanded ? 'rgba(0,0,0,0.02)' : 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+                  <div style={{ fontSize: '1.8rem' }}>{insight.icon}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                      <h3 style={{ fontSize: '1.1rem', margin: 0, color: '#2c3e50' }}>
+                        {insight.title}
+                      </h3>
+                      <span style={{ 
+                        padding: '3px 10px',
+                        borderRadius: '10px',
+                        fontSize: '0.7rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        background: insight.priority === 'critical' ? '#e74c3c' : 
+                                   insight.priority === 'high' ? '#f39c12' : 
+                                   insight.priority === 'medium' ? '#3498db' : '#95a5a6',
+                        color: 'white'
+                      }}>
+                        {insight.priority}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#7f8c8d' }}>
+                      {insight.category}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ 
+                  fontSize: '1.5rem', 
+                  color: '#7f8c8d',
+                  transition: 'transform 0.3s',
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'
+                }}>
+                  ▼
+                </div>
+              </div>
+
+              {/* Expandable content */}
+              {isExpanded && (
+                <div style={{ padding: '0 20px 20px 20px' }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#2c3e50', marginBottom: '8px' }}>
+                      📊 Analysis:
+                    </div>
+                    <div style={{ fontSize: '0.95rem', color: '#34495e', lineHeight: '1.6', paddingLeft: '24px' }}>
+                      {insight.analysis}
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#2c3e50', marginBottom: '8px' }}>
+                      💡 Recommendation:
+                    </div>
+                    <div style={{ 
+                      fontSize: '0.95rem', 
+                      color: '#2c3e50', 
+                      lineHeight: '1.6',
+                      paddingLeft: '24px',
+                      fontWeight: 500
+                    }}>
+                      {insight.recommendation}
+                    </div>
+                  </div>
+
+                  <div style={{ 
+                    padding: '12px',
+                    background: 'rgba(102, 126, 234, 0.1)',
+                    borderRadius: '6px',
+                    fontSize: '0.9rem',
+                    color: '#667eea',
+                    fontWeight: 500
                   }}>
-                    {insight.priority}
-                  </span>
+                    <strong>Impact:</strong> {insight.impact}
+                  </div>
                 </div>
-                <div style={{ fontSize: '0.85rem', color: '#7f8c8d', marginBottom: '4px' }}>
-                  {insight.category}
-                </div>
-              </div>
+              )}
             </div>
-
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#2c3e50', marginBottom: '8px' }}>
-                📊 Analysis:
-              </div>
-              <div style={{ fontSize: '0.95rem', color: '#34495e', lineHeight: '1.6', paddingLeft: '24px' }}>
-                {insight.analysis}
-              </div>
-            </div>
-
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#2c3e50', marginBottom: '8px' }}>
-                💡 Recommendation:
-              </div>
-              <div style={{ 
-                fontSize: '0.95rem', 
-                color: '#2c3e50', 
-                lineHeight: '1.6',
-                paddingLeft: '24px',
-                fontWeight: 500
-              }}>
-                {insight.recommendation}
-              </div>
-            </div>
-
-            <div style={{ 
-              padding: '12px',
-              background: 'rgba(102, 126, 234, 0.1)',
-              borderRadius: '6px',
-              fontSize: '0.9rem',
-              color: '#667eea',
-              fontWeight: 500
-            }}>
-              <strong>Impact:</strong> {insight.impact}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div style={{ 

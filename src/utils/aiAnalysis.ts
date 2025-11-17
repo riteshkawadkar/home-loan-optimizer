@@ -26,14 +26,6 @@ export interface FinancialMetrics {
   equityAllocation: number;
   debtAllocation: number;
   sipToIncomeRatio: number;
-  
-  // Life stage metrics
-  yearsToRetirement: number;
-  dependencyRatio: number;
-  
-  // Goal metrics
-  monthlyGoalSavingsNeeded: number;
-  goalFeasibility: 'easy' | 'moderate' | 'challenging' | 'difficult';
 }
 
 export function calculateFinancialMetrics(
@@ -86,22 +78,6 @@ export function calculateFinancialMetrics(
   const equityAllocation = 0; // Not tracked
   const debtAllocation = 0; // Not tracked
   
-  // Life stage
-  const yearsToRetirement = Math.max(0, financialHealth.retirementAge - financialHealth.currentAge);
-  const dependencyRatio = financialHealth.dependents;
-  
-  // Goals
-  const monthlyGoalSavingsNeeded = financialHealth.majorGoalsTimeline > 0 
-    ? financialHealth.majorGoalsAmount / (financialHealth.majorGoalsTimeline * 12) 
-    : 0;
-  
-  const availableForGoals = totalMonthlyIncome - financialHealth.monthlyExpenses - financialHealth.monthlyInvestmentSIP;
-  const goalFeasibility: 'easy' | 'moderate' | 'challenging' | 'difficult' = 
-    monthlyGoalSavingsNeeded === 0 ? 'easy' :
-    monthlyGoalSavingsNeeded < availableForGoals * 0.3 ? 'easy' :
-    monthlyGoalSavingsNeeded < availableForGoals * 0.6 ? 'moderate' :
-    monthlyGoalSavingsNeeded < availableForGoals ? 'challenging' : 'difficult';
-  
   return {
     totalMonthlyIncome,
     annualIncome,
@@ -117,11 +93,7 @@ export function calculateFinancialMetrics(
     debtToAssetRatio,
     equityAllocation,
     debtAllocation,
-    sipToIncomeRatio,
-    yearsToRetirement,
-    dependencyRatio,
-    monthlyGoalSavingsNeeded,
-    goalFeasibility
+    sipToIncomeRatio
   };
 }
 
@@ -213,7 +185,7 @@ export function generateDetailedInsights(
     insights.push(`Your net worth is ${formatLargeNumber(metrics.netWorth)} (${netWorthToIncome.toFixed(1)}x annual income).`);
     
     if (netWorthToIncome < 1) {
-      insights.push(`Target: Build net worth to at least 1x annual income by age ${financialHealth.currentAge + 5}.`);
+      insights.push(`Target: Build net worth to at least 1x annual income in the next 5 years.`);
     }
   } else {
     insights.push(`⚠️ Your net worth is negative (${formatLargeNumber(metrics.netWorth)}). Focus on debt reduction and asset building.`);
@@ -230,43 +202,7 @@ export function generateDetailedInsights(
   
   // Investment insights
   if (metrics.investmentAssets > 0) {
-    insights.push(`Investment portfolio: ${formatLargeNumber(metrics.investmentAssets)} (${metrics.equityAllocation.toFixed(0)}% equity, ${metrics.debtAllocation.toFixed(0)}% debt).`);
-    
-    const idealEquity = Math.min(100, 100 - financialHealth.currentAge);
-    if (Math.abs(metrics.equityAllocation - idealEquity) > 20) {
-      insights.push(`Consider rebalancing: At age ${financialHealth.currentAge}, target ~${idealEquity}% equity allocation.`);
-    }
-  }
-  
-  // Retirement insights
-  if (metrics.yearsToRetirement > 0) {
-    const retirementCorpusNeeded = financialHealth.monthlyExpensesExcludingLoan * 12 * 25; // 25x annual expenses
-    const currentInvestments = metrics.investmentAssets;
-    const gap = retirementCorpusNeeded - currentInvestments;
-    
-    if (gap > 0) {
-      const monthlyNeeded = gap / (metrics.yearsToRetirement * 12);
-      insights.push(`Retirement in ${metrics.yearsToRetirement} years. Need ${formatLargeNumber(retirementCorpusNeeded)} corpus. Current gap: ${formatLargeNumber(gap)}.`);
-      insights.push(`To bridge gap: Invest ${formatCurrency(monthlyNeeded)}/month at 12% return.`);
-    } else {
-      insights.push(`Great! You're on track for retirement with ${formatLargeNumber(currentInvestments)} already invested.`);
-    }
-  }
-  
-  // Goals insights
-  if (financialHealth.majorGoalsAmount > 0) {
-    insights.push(`Major goal: ${formatLargeNumber(financialHealth.majorGoalsAmount)} in ${financialHealth.majorGoalsTimeline} years requires ${formatCurrency(metrics.monthlyGoalSavingsNeeded)}/month.`);
-    
-    if (metrics.goalFeasibility === 'difficult') {
-      insights.push(`⚠️ This goal is challenging with current income. Consider extending timeline or reducing amount.`);
-    } else if (metrics.goalFeasibility === 'easy') {
-      insights.push(`This goal is easily achievable with your current financial situation.`);
-    }
-  }
-  
-  // Dependency insights
-  if (metrics.dependencyRatio > 0) {
-    insights.push(`With ${metrics.dependencyRatio} dependent(s), ensure adequate life insurance (${formatLargeNumber(metrics.annualIncome * 15)}) and health coverage.`);
+    insights.push(`Investment portfolio: ${formatLargeNumber(metrics.investmentAssets)}.`);
   }
   
   return insights;
@@ -358,13 +294,6 @@ export function calculateOptimalPrepaymentStrategy(
     prepaymentRatio = Math.max(prepaymentRatio - 0.15, 0.2);
   }
   
-  // Adjust based on age and retirement proximity
-  const yearsToRetirement = financialHealth.retirementAge - financialHealth.currentAge;
-  if (yearsToRetirement < 10) {
-    // Close to retirement - be more conservative, reduce debt
-    prepaymentRatio = Math.min(prepaymentRatio + 0.15, 0.85);
-  }
-  
   // Calculate optimal allocation
   const totalMonthlySurplus = monthlySurplus;
   const monthlyPrepayment = Math.round(totalMonthlySurplus * prepaymentRatio);
@@ -399,10 +328,6 @@ export function calculateOptimalPrepaymentStrategy(
     rationale += ` With only ${remainingYears.toFixed(1)} years left, prioritizing debt closure for financial freedom.`;
   } else if (remainingYears > 15) {
     rationale += ` With ${remainingYears.toFixed(0)} years remaining, focus on wealth building while managing debt.`;
-  }
-  
-  if (yearsToRetirement < 10) {
-    rationale += ` Approaching retirement in ${yearsToRetirement} years - reducing debt burden is prudent.`;
   }
   
   const confidence: 'high' | 'medium' | 'low' = 

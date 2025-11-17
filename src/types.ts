@@ -5,6 +5,7 @@ export interface LoanInfo {
   currentEMI: number;
   interestRate: number;
   prepaymentPenalty: number;
+  customOutstandingPrincipal?: number; // Optional: User can override auto-calculated value
 }
 
 export interface PrepaymentPlan {
@@ -37,13 +38,6 @@ export interface FinancialHealth {
   // Liabilities
   otherLoans: number;
   creditCardDebt: number;
-  
-  // Goals & Timeline
-  retirementAge: number;
-  currentAge: number;
-  dependents: number;
-  majorGoalsAmount: number;
-  majorGoalsTimeline: number;
 }
 
 export interface Lumpsum {

@@ -286,44 +286,79 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
                   }
                 </motion.p>
 
-                {/* GitHub Star Button */}
+                {/* GitHub Star Button - Enhanced */}
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  style={{ marginTop: '12px' }}
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0,
+                    scale: 1
+                  }}
+                  transition={{ 
+                    delay: 0.5,
+                    type: 'spring',
+                    stiffness: 200
+                  }}
+                  style={{ marginTop: '16px' }}
                 >
-                  <a
+                  <motion.a
                     href="https://github.com/riteshkawadkar/home-loan-optimizer"
                     target="_blank"
                     rel="noopener noreferrer"
+                    animate={{
+                      boxShadow: [
+                        '0 0 0 0 rgba(255, 255, 255, 0.4)',
+                        '0 0 0 8px rgba(255, 255, 255, 0)',
+                        '0 0 0 0 rgba(255, 255, 255, 0)'
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '8px',
-                      padding: '10px 20px',
-                      background: 'rgba(255, 255, 255, 0.25)',
-                      color: 'white',
+                      gap: '10px',
+                      padding: '14px 28px',
+                      background: 'white',
+                      color: '#667eea',
                       textDecoration: 'none',
-                      borderRadius: '8px',
-                      fontSize: '0.9rem',
-                      fontWeight: 600,
+                      borderRadius: '12px',
+                      fontSize: '1.05rem',
+                      fontWeight: 700,
                       transition: 'all 0.3s ease',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.3)'
+                      border: '2px solid white',
+                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)';
-                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.background = '#f8f9ff';
+                      e.currentTarget.style.transform = 'scale(1.08) translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
                     }}
                     onMouseOut={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
-                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.background = 'white';
+                      e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
                     }}
                   >
-                    <span style={{ fontSize: '1.2rem' }}>⭐</span>
+                    <motion.span 
+                      animate={{ 
+                        rotate: [0, 15, -15, 0],
+                        scale: [1, 1.2, 1]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: 'easeInOut'
+                      }}
+                      style={{ fontSize: '1.5rem' }}
+                    >
+                      ⭐
+                    </motion.span>
                     <span>Star this project on GitHub</span>
-                  </a>
+                  </motion.a>
                 </motion.div>
 
                 {/* Badges */}
@@ -433,7 +468,7 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
                   </div>
 
                   <div style={{
-                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
                     padding: '20px',
                     borderRadius: '12px',
                     color: 'white',
@@ -452,7 +487,7 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
 
                   {strategy.lumpsumPrepayment > 0 && (
                     <div style={{
-                      background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                      background: 'linear-gradient(135deg, #8e54e9 0%, #4776e6 100%)',
                       padding: '20px',
                       borderRadius: '12px',
                       color: 'white',
@@ -471,7 +506,7 @@ export default function OptimalStrategyModal({ isOpen, onClose, strategy, onAppl
                   )}
 
                   <div style={{
-                    background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                    background: 'linear-gradient(135deg, #5f72bd 0%, #9b23ea 100%)',
                     padding: '20px',
                     borderRadius: '12px',
                     color: 'white',

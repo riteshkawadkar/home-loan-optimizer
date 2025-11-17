@@ -9,13 +9,23 @@ interface Props {
 }
 
 export default function FinancialHealthForm({ financialHealth, onChange, showCard = true }: Props) {
+  const formatIndianNumber = (num: number): string => {
+    if (num === 0) return '₹0';
+    const numStr = num.toString();
+    const lastThree = numStr.substring(numStr.length - 3);
+    const otherNumbers = numStr.substring(0, numStr.length - 3);
+    if (otherNumbers !== '') {
+      return '₹' + otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree;
+    }
+    return '₹' + lastThree;
+  };
+
   const [expandedSections, setExpandedSections] = useState({
-    income: true,
-    expenses: true,
-    savings: true,
+    income: false,
+    expenses: false,
+    savings: false,
     investments: false,
-    liabilities: false,
-    goals: false
+    liabilities: false
   });
 
   const handleChange = (field: keyof FinancialHealth, value: number) => {
@@ -123,13 +133,21 @@ export default function FinancialHealthForm({ financialHealth, onChange, showCar
           <div style={{ paddingLeft: '12px' }}>
             <div className="form-group">
               <label>Monthly Income (Salary)</label>
-              <input type="number" value={financialHealth.monthlyIncome} 
-                onChange={(e) => handleChange('monthlyIncome', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.monthlyIncome)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('monthlyIncome', Number(value) || 0);
+                }}
+                placeholder="₹1,00,000" />
             </div>
             <div className="form-group">
               <label>Other Monthly Income</label>
-              <input type="number" value={financialHealth.otherIncome} 
-                onChange={(e) => handleChange('otherIncome', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.otherIncome)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('otherIncome', Number(value) || 0);
+                }}
+                placeholder="₹20,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Bonus (monthly avg), rental, freelance, etc.</small>
             </div>
           </div>
@@ -159,14 +177,22 @@ export default function FinancialHealthForm({ financialHealth, onChange, showCar
           <div style={{ paddingLeft: '12px' }}>
             <div className="form-group">
               <label>Total Monthly Expenses</label>
-              <input type="number" value={financialHealth.monthlyExpenses} 
-                onChange={(e) => handleChange('monthlyExpenses', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.monthlyExpenses)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('monthlyExpenses', Number(value) || 0);
+                }}
+                placeholder="₹80,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Including loan EMI</small>
             </div>
             <div className="form-group">
               <label>Monthly Expenses (Excluding Loan)</label>
-              <input type="number" value={financialHealth.monthlyExpensesExcludingLoan} 
-                onChange={(e) => handleChange('monthlyExpensesExcludingLoan', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.monthlyExpensesExcludingLoan)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('monthlyExpensesExcludingLoan', Number(value) || 0);
+                }}
+                placeholder="₹50,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>For emergency fund calculation</small>
             </div>
           </div>
@@ -195,13 +221,21 @@ export default function FinancialHealthForm({ financialHealth, onChange, showCar
           <div style={{ paddingLeft: '12px' }}>
             <div className="form-group">
               <label>Emergency Fund</label>
-              <input type="number" value={financialHealth.emergencyFund} 
-                onChange={(e) => handleChange('emergencyFund', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.emergencyFund)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('emergencyFund', Number(value) || 0);
+                }}
+                placeholder="₹3,00,000" />
             </div>
             <div className="form-group">
               <label>Liquid Savings</label>
-              <input type="number" value={financialHealth.liquidSavings} 
-                onChange={(e) => handleChange('liquidSavings', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.liquidSavings)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('liquidSavings', Number(value) || 0);
+                }}
+                placeholder="₹5,00,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Savings account, FD, etc.</small>
             </div>
             <div style={{ 
@@ -248,16 +282,24 @@ export default function FinancialHealthForm({ financialHealth, onChange, showCar
           <div style={{ paddingLeft: '12px' }}>
             <div className="form-group">
               <label>Total Investment Portfolio</label>
-              <input type="number" value={financialHealth.totalInvestments} 
-                onChange={(e) => handleChange('totalInvestments', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.totalInvestments)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('totalInvestments', Number(value) || 0);
+                }}
+                placeholder="₹10,00,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>
                 All investments: MF, stocks, FD, PPF, bonds, etc.
               </small>
             </div>
             <div className="form-group">
               <label>Monthly SIP</label>
-              <input type="number" value={financialHealth.monthlyInvestmentSIP} 
-                onChange={(e) => handleChange('monthlyInvestmentSIP', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.monthlyInvestmentSIP)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('monthlyInvestmentSIP', Number(value) || 0);
+                }}
+                placeholder="₹15,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>
                 Ongoing monthly investment commitments
               </small>
@@ -288,69 +330,28 @@ export default function FinancialHealthForm({ financialHealth, onChange, showCar
           <div style={{ paddingLeft: '12px' }}>
             <div className="form-group">
               <label>Other Loans</label>
-              <input type="number" value={financialHealth.otherLoans} 
-                onChange={(e) => handleChange('otherLoans', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.otherLoans)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('otherLoans', Number(value) || 0);
+                }}
+                placeholder="₹2,00,000" />
               <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Car loan, personal loan, etc.</small>
             </div>
             <div className="form-group">
               <label>Credit Card Debt</label>
-              <input type="number" value={financialHealth.creditCardDebt} 
-                onChange={(e) => handleChange('creditCardDebt', Number(e.target.value))} />
+              <input type="text" value={formatIndianNumber(financialHealth.creditCardDebt)} 
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  handleChange('creditCardDebt', Number(value) || 0);
+                }}
+                placeholder="₹50,000" />
             </div>
           </div>
         )}
       </div>
 
-      {/* Goals Section */}
-      <div style={{ marginBottom: '16px' }}>
-        <div 
-          onClick={() => toggleSection('goals')}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            padding: '12px',
-            background: '#f8f9fa',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            marginBottom: '8px'
-          }}
-        >
-          <h3 style={{ fontSize: '1rem', margin: 0 }}>🎯 Goals & Timeline</h3>
-          <span>{expandedSections.goals ? '▼' : '▶'}</span>
-        </div>
-        {expandedSections.goals && (
-          <div style={{ paddingLeft: '12px' }}>
-            <div className="form-group">
-              <label>Current Age</label>
-              <input type="number" value={financialHealth.currentAge} 
-                onChange={(e) => handleChange('currentAge', Number(e.target.value))} />
-            </div>
-            <div className="form-group">
-              <label>Retirement Age</label>
-              <input type="number" value={financialHealth.retirementAge} 
-                onChange={(e) => handleChange('retirementAge', Number(e.target.value))} />
-            </div>
-            <div className="form-group">
-              <label>Number of Dependents</label>
-              <input type="number" value={financialHealth.dependents} 
-                onChange={(e) => handleChange('dependents', Number(e.target.value))} />
-              <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Children, parents, etc.</small>
-            </div>
-            <div className="form-group">
-              <label>Major Goals Amount</label>
-              <input type="number" value={financialHealth.majorGoalsAmount} 
-                onChange={(e) => handleChange('majorGoalsAmount', Number(e.target.value))} />
-              <small style={{ color: '#7f8c8d', fontSize: '0.85rem' }}>Education, marriage, etc.</small>
-            </div>
-            <div className="form-group">
-              <label>Goals Timeline (years)</label>
-              <input type="number" value={financialHealth.majorGoalsTimeline} 
-                onChange={(e) => handleChange('majorGoalsTimeline', Number(e.target.value))} />
-            </div>
-          </div>
-        )}
-          </div>
+
         </div>
       </div>
 

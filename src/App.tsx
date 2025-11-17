@@ -10,7 +10,6 @@ import VisualDashboard from './components/VisualDashboard';
 import OptimalStrategyModal from './components/OptimalStrategyModal';
 import { calculateOutstandingPrincipal, calculateMonthsElapsed, generateAmortizationSchedule } from './utils/calculations';
 import { calculateOptimalPrepaymentStrategy } from './utils/aiAnalysis';
-import { useTheme } from './contexts/ThemeContext';
 import './App.css';
 
 const defaultInvestmentOptions: InvestmentOption[] = [
@@ -21,8 +20,6 @@ const defaultInvestmentOptions: InvestmentOption[] = [
 ];
 
 function App() {
-  const { theme, toggleTheme } = useTheme();
-  
   const [loanInfo, setLoanInfo] = useState<LoanInfo>({
     startDate: '2020-01',
     originalAmount: 5000000,
@@ -61,14 +58,7 @@ function App() {
     
     // Liabilities
     otherLoans: 0,
-    creditCardDebt: 0,
-    
-    // Goals
-    currentAge: 35,
-    retirementAge: 60,
-    dependents: 2,
-    majorGoalsAmount: 2000000,
-    majorGoalsTimeline: 10
+    creditCardDebt: 0
   });
 
   const [surplusAmount, setSurplusAmount] = useState<number>(20000);
@@ -206,13 +196,6 @@ function App() {
             <span>🍴</span>
             <span>Fork</span>
           </a>
-          <button 
-            className="theme-toggle" 
-            onClick={toggleTheme}
-            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
         </div>
       </header>
 
@@ -232,7 +215,6 @@ function App() {
           {/* Visual Dashboard - Always visible at top */}
           <VisualDashboard
             loanInfo={loanInfo}
-            financialHealth={financialHealth}
             interestSaved={interestSaved}
             monthsSaved={monthsSaved}
           />
@@ -334,7 +316,7 @@ function App() {
       {/* Footer */}
       <footer className="app-footer">
         <div className="footer-content">
-          <div className="footer-info">
+          <div className="footer-row">
             <span className="footer-version">
               v{import.meta.env.VITE_APP_VERSION || '1.0.0'}
             </span>
@@ -342,11 +324,12 @@ function App() {
             <span className="footer-commit">
               Build {import.meta.env.VITE_COMMIT_HASH || 'dev'}
             </span>
+            <span className="footer-separator">•</span>
+            <span className="footer-tagline">
+              Made with ❤️ for better financial planning
+            </span>
           </div>
-          <div className="footer-tagline">
-            Made with ❤️ for better financial planning
-          </div>
-          <div className="footer-links">
+          <div className="footer-row footer-links">
             <a 
               href="https://github.com/riteshkawadkar/home-loan-optimizer" 
               target="_blank" 
