@@ -220,11 +220,56 @@ export interface OptimalPrepaymentStrategy {
   riskLevel: 'conservative' | 'balanced' | 'aggressive';
 }
 
+// Helper function to calculate actual savings from prepayment
+function calculatePrepaymentImpact(
+  outstandingPrincipal: number,
+  emi: number,
+  annualRate: number,
+  monthlyPrepayment: number,
+  remainingMonths: number
+): { interestSaved: number; monthsSaved: number } {
+  const monthlyRate = annualRate / 12 / 100;
+  
+  // Scenario 1: No prepayment
+  let balance1 = outstandingPrincipal;
+  let totalInterest1 = 0;
+  let months1 = 0;
+  
+  while (balance1 > 0.01 && months1 < remainingMonths) {
+    const interest = balance1 * monthlyRate;
+    const principal = Math.min(emi - interest, balance1);
+    balance1 -= principal;
+    totalInterest1 += interest;
+    months1++;
+    if (balance1 <= 0) break;
+  }
+  
+  // Scenario 2: With prepayment
+  let balance2 = outstandingPrincipal;
+  let totalInterest2 = 0;
+  let months2 = 0;
+  
+  while (balance2 > 0.01 && months2 < remainingMonths) {
+    const interest = balance2 * monthlyRate;
+    let principal = emi - interest + monthlyPrepayment;
+    principal = Math.min(principal, balance2);
+    balance2 -= principal;
+    totalInterest2 += interest;
+    months2++;
+    if (balance2 <= 0) break;
+  }
+  
+  return {
+    interestSaved: Math.max(0, totalInterest1 - totalInterest2),
+    monthsSaved: Math.max(0, months1 - months2)
+  };
+}
+
 export function calculateOptimalPrepaymentStrategy(
   monthlySurplus: number,
   loanInfo: LoanInfo,
   financialHealth: FinancialHealth,
-  _outstandingPrincipal: number,
+  outstandingPrincipal: number,
   investmentReturn: number
 ): OptimalPrepaymentStrategy {
   const postTaxReturn = investmentReturn;
@@ -308,10 +353,20 @@ export function calculateOptimalPrepaymentStrategy(
   
   const totalAnnualPrepayment = (monthlyComponent * 12) + yearlyComponent + lumpsumSuggestion;
   
-  // Estimate impact (simplified calculation)
+  // Calculate actual impact using proper amortization
   const avgMonthlyPrepayment = totalAnnualPrepayment / 12;
-  const estimatedInterestSaved = avgMonthlyPrepayment * remainingYears * (loanRate / 100) * 0.7; // Rough estimate
-  const estimatedMonthsSaved = Math.round((avgMonthlyPrepayment / loanInfo.currentEMI) * 12 * 0.8); // Rough estimate
+  const remainingMonths = Math.round(remainingYears * 12);
+  
+  const impact = calculatePrepaymentImpact(
+    outstandingPrincipal,
+    loanInfo.currentEMI,
+    loanInfo.interestRate,
+    avgMonthlyPrepayment,
+    remainingMonths
+  );
+  
+  const estimatedInterestSaved = Math.round(impact.interestSaved);
+  const estimatedMonthsSaved = impact.monthsSaved;
   
   // Generate rationale
   let rationale = '';
